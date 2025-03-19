@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		04C977922D8B0E3A0092CA67 /* SwiftyNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 04C977912D8B0E3A0092CA67 /* SwiftyNetworking */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		047125982D87D4BC00072E5D /* ZellFarms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZellFarms.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04C977922D8B0E3A0092CA67 /* SwiftyNetworking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = ZellFarms;
 			packageProductDependencies = (
+				04C977912D8B0E3A0092CA67 /* SwiftyNetworking */,
 			);
 			productName = ZellFarms;
 			productReference = 047125982D87D4BC00072E5D /* ZellFarms.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 0471258F2D87D4BC00072E5D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				04C977902D8B0E3A0092CA67 /* XCRemoteSwiftPackageReference "SwiftyNetworking" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 047125992D87D4BC00072E5D /* Products */;
 			projectDirPath = "";
@@ -322,6 +331,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		04C977902D8B0E3A0092CA67 /* XCRemoteSwiftPackageReference "SwiftyNetworking" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/antonio-war/SwiftyNetworking";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		04C977912D8B0E3A0092CA67 /* SwiftyNetworking */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04C977902D8B0E3A0092CA67 /* XCRemoteSwiftPackageReference "SwiftyNetworking" */;
+			productName = SwiftyNetworking;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 047125902D87D4BC00072E5D /* Project object */;
 }

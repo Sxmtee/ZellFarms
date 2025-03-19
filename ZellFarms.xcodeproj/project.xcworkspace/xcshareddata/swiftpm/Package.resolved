@@ -1,0 +1,15 @@
+{
+  "originHash" : "9d8df7db653a055ac77c25c7e7ba7524b7eb18260c2f9efa22f3977bfe89d626",
+  "pins" : [
+    {
+      "identity" : "swiftynetworking",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/antonio-war/SwiftyNetworking",
+      "state" : {
+        "revision" : "c66198a58a74f1bce815f30828e3a31ebcc7e70d",
+        "version" : "0.7.0"
+      }
+    }
+  ],
+  "version" : 3
+}
