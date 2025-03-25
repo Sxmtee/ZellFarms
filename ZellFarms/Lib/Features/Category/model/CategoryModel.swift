@@ -1,11 +1,4 @@
-//
-//  CategoryModel.swift
-//  ZellFarms
-//
-//  Created by mac on 19/03/2025.
-//
-
-
+// CategoryModel.swift
 import Foundation
 
 // MARK: - CategoryModel
@@ -15,8 +8,8 @@ struct CategoryModel: Codable {
     let data: [Categories]
 }
 
-// MARK: - Datum
-struct Categories: Codable {
+// MARK: - Categories
+struct Categories: Codable, Hashable {
     let id, name, slug: String
     let imageURL: String
     let deletedAt: JSONNull?
@@ -33,13 +26,14 @@ struct Categories: Codable {
     }
 }
 
-enum AtedAt: String, Codable {
+// MARK: - AtedAt
+enum AtedAt: String, Codable, Hashable {
     case the20250115T100551000000Z = "2025-01-15T10:05:51.000000Z"
     case the20250115T100552000000Z = "2025-01-15T10:05:52.000000Z"
 }
 
 // MARK: - Product
-struct Product: Codable {
+struct Product: Codable, Hashable {
     let id, farmID, createdBy, categoryID: String
     let unitID, name, slug, description: String
     let deletedAt: JSONNull?
@@ -63,10 +57,9 @@ struct Product: Codable {
 }
 
 // MARK: - Images
-struct Images: Codable {
+struct Images: Codable, Hashable {
     let id, uploaderID, productID: String
-    let url: String
-    let name: String
+    let url, name: String
     let deletedAt: JSONNull?
     let createdAt, updatedAt: String
 
@@ -82,7 +75,7 @@ struct Images: Codable {
 }
 
 // MARK: - ProductUnit
-struct ProductUnit: Codable {
+struct ProductUnit: Codable, Hashable {
     let id, farmID, productID, unitID: String
     let pricePerUnit, unitNumber, stock: Int
     let status: String
@@ -106,7 +99,7 @@ struct ProductUnit: Codable {
 }
 
 // MARK: - Unit
-struct Unit: Codable {
+struct Unit: Codable, Hashable {
     let id, name, symbol, conversionFactor: String
     let deletedAt: JSONNull?
     let createdAt, updatedAt: AtedAt
@@ -120,8 +113,7 @@ struct Unit: Codable {
     }
 }
 
-// MARK: - Encode/decode helpers
-
+// MARK: - JSONNull (unchanged)
 class JSONNull: Codable, Hashable {
     static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
         return true // All JSONNull instances are equal

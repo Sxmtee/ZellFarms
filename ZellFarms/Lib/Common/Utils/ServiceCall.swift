@@ -28,11 +28,11 @@ class ServiceCall {
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
         
         // Print raw response for debugging
-        if let rawString = String(data: data, encoding: .utf8) {
-            print("Raw Response Data: \(rawString)")
-        } else {
-            print("Raw Response Data: Unable to convert to string")
-        }
+//        if let rawString = String(data: data, encoding: .utf8) {
+//            print("Raw Response Data: \(rawString)")
+//        } else {
+//            print("Raw Response Data: Unable to convert to string")
+//        }
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.serverError("Invalid response type")

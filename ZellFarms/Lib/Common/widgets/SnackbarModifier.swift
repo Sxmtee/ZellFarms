@@ -19,7 +19,6 @@ struct SnackbarModifier: ViewModifier {
             
             if isShowing {
                 VStack {
-                    Spacer()
                     HStack(spacing: 12) {
                         Image(systemName: isSuccess ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
                             .foregroundColor(.white)
@@ -46,9 +45,11 @@ struct SnackbarModifier: ViewModifier {
                             .fill(isSuccess ? Color.green.opacity(0.9) : Color.red.opacity(0.9))
                     )
                     .padding(.horizontal)
-                    .padding(.bottom, 20)
+                    .padding(.top, 20) // Adjusted padding for top placement
+                    
+                    Spacer() // Pushes the snackbar to the top
                 }
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .transition(.move(edge: .top).combined(with: .opacity))
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
                         withAnimation {

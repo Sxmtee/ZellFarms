@@ -17,43 +17,42 @@ struct CategoryScreen: View {
     ]
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                if category.isLoading {
-                    ProgressView()
-                } else {
-                    ScrollView(showsIndicators: false) {
-                        LazyVGrid(columns: layout, spacing: 6) {
-                            ForEach(categories, id: \.id) { categorize in
-                                CategoryCard(category: categorize)
-                            }
+        VStack {
+            if category.isLoading {
+                ProgressView()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    LazyVGrid(columns: layout, spacing: 6) {
+                        ForEach(categories, id: \.id) { categorize in
+                            CategoryCard(category: categorize)
                         }
-                        .padding()
                     }
+                    .padding()
                 }
             }
-            .navigationTitle("Category")
-            .navigationBarTitleDisplayMode(.inline)
-            .task {
-                do {
-                    let loadedCategories = try await category.getCategories()
-                    categories = loadedCategories
-                } catch {
-                }
-            }
-            .snackbar(
-                isShowing: $category.showErrorSnackbar,
-                message: category.error ?? ""
-            )
-            .snackbar(
-                isShowing: $category.showSuccessSnackbar,
-                message: category.successMessage ?? "",
-                isSuccess: true
-            )
         }
+        .navigationTitle("Category")
+        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            do {
+                let loadedCategories = try await category.getCategories()
+                categories = loadedCategories
+            } catch {
+            }
+        }
+        .snackbar(
+            isShowing: $category.showErrorSnackbar,
+            message: category.error ?? ""
+        )
+        .snackbar(
+            isShowing: $category.showSuccessSnackbar,
+            message: category.successMessage ?? "",
+            isSuccess: true
+        )
     }
 }
 
 #Preview {
     CategoryScreen()
+        .environment(Router())
 }

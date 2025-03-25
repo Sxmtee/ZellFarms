@@ -9,11 +9,12 @@ import SwiftUI
 
 struct CategoryCard: View {
     let category: Categories
+    @Environment(Router.self) private var router
     
     var body: some View {
-        NavigationLink(
-            destination: Text(category.name)
-        ) {
+        Button {
+            router.push(.categoryProduct(category: category))
+        } label: {
             VStack {
                 Text(category.name)
                     .font(.system(size: 16, weight: .bold))

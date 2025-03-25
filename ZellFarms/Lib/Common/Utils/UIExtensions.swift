@@ -29,3 +29,7 @@ func formatPrice(_ price: String) -> String {
     // Format the price
     return formatter.string(from: NSNumber(value: parsedPrice)) ?? "\(parsedPrice)"
 }
+
+func getUnitDisplayText(_ unit: ProductUnit) -> String {
+    return "\(unit.unitNumber) \(unit.unit.name)"
+}
