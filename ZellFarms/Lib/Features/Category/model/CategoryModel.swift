@@ -2,7 +2,7 @@
 import Foundation
 
 // MARK: - CategoryModel
-struct CategoryModel: Codable {
+struct CategoryModel: Codable, Hashable {
     let success: Bool
     let message: String
     let data: [Categories]

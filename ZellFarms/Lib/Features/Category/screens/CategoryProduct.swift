@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CategoryProduct: View {
     let products: [Product]
-    let title: String
     
     @Environment(Router.self) private var router
     

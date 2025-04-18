@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeScreen: View {
     var body: some View {
         NavigationStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 15) {
                     HStack {
                         Image("zelwhite")
@@ -35,13 +35,20 @@ struct HomeScreen: View {
                     
                     Text("What would you like to order today?")
                         .font(.system(size: 18))
+                    
+                    HomeCategory()
+                    
+                    HomeTodayChoice()
+                    
+                    HomeLimitedDiscount()
+                    
+                    HomeCheapest()
+                    
+                    HomeTodaySpecial()
                 }
             }
             .padding()
+            .padding(.bottom, 60)
         }
     }
-}
-
-#Preview {
-    HomeScreen()
 }

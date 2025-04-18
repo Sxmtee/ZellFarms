@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct ZellFarmsApp: App {
+    @State private var router = Router()
+    
     var body: some Scene {
         WindowGroup {
             ZellFarmsAppRoot()
+                .environment(router)
         }
     }
 }

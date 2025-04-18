@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CategoryScreen: View {
     @State private var category = CategoryRepo()
-    @State private var categories: [Categories] = []
     
     let layout = [
         GridItem(.flexible(), spacing: 5),
@@ -23,7 +22,7 @@ struct CategoryScreen: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVGrid(columns: layout, spacing: 6) {
-                        ForEach(categories, id: \.id) { categorize in
+                        ForEach(category.categories, id: \.id) { categorize in
                             CategoryCard(category: categorize)
                         }
                     }
@@ -34,11 +33,7 @@ struct CategoryScreen: View {
         .navigationTitle("Category")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            do {
-                let loadedCategories = try await category.getCategories()
-                categories = loadedCategories
-            } catch {
-            }
+            await category.getCategories()
         }
         .snackbar(
             isShowing: $category.showErrorSnackbar,

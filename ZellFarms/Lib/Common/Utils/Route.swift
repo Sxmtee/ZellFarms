@@ -10,8 +10,17 @@
 import SwiftUI
 
 enum Route: Hashable {
+    //! Categories
     case categoryProduct(category: Categories)
     case categoryProductPage(product: Product)
+    case categorySeeAll(categories: [Categories])
+    
+    //! Product
+    case productSalePage(cheapest: ProductCheapest)
+    case homeTodayChoiceSeeAll(todayChoicesList: [ProductCheapest])
+    case homeLimitedDiscountSeeAll(limitedDiscountList: [ProductCheapest])
+    case homeCheapestSeeAll(cheapestList: [ProductCheapest])
+    case homeTodaySpecialSeeAll(todaySpecialList: [ProductCheapest])
 }
 
 @Observable
