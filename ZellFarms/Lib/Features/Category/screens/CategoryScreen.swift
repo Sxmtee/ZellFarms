@@ -29,9 +29,10 @@ struct CategoryScreen: View {
                     .padding()
                 }
             }
+            
+            Spacer()
         }
-        .navigationTitle("Category")
-        .navigationBarTitleDisplayMode(.inline)
+        .padding(.bottom, 60)
         .task {
             await category.getCategories()
         }
@@ -45,9 +46,4 @@ struct CategoryScreen: View {
             isSuccess: true
         )
     }
-}
-
-#Preview {
-    CategoryScreen()
-        .environment(Router())
 }

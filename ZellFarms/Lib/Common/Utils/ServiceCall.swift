@@ -39,7 +39,8 @@ class ServiceCall {
         }
         
         guard (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkError.serverError("Server returned status code: \(httpResponse.statusCode)")
+            throw NetworkError.serverError(
+                "Server returned status code: \(httpResponse.statusCode)")
         }
         
         return (data: data, statusCode: httpResponse.statusCode)

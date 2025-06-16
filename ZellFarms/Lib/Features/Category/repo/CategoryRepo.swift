@@ -8,10 +8,10 @@
 import Foundation
 import SwiftyNetworking
 
-
 @Observable
 class CategoryRepo {
     var categories: [Categories] = []
+    var searches: [SearchData] = []
     
     var showErrorSnackbar = false
     var showSuccessSnackbar = false
@@ -78,6 +78,40 @@ class CategoryRepo {
         } catch {
             self.error = "An unexpected error occurred: \(error.localizedDescription)"
             throw error
+        }
+    }
+    
+    func searchProducts(category: String, search: String) async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            let body: [String: Any] = [
+                "category": category,
+                "keyword": search
+            ]
+            
+            let bodyData = try JSONSerialization.data(withJSONObject: body)
+            
+            let request = try SwiftyNetworkingRequest(
+                url: URL(string: "\(baseUrl)/products/search"),
+                method: .post,
+                body: bodyData
+            )
+            
+            
+            let (data, _) = try await ServiceCall.performRequest(request)
+            
+            let decoder = JSONDecoder()
+            let searchResponse = try decoder.decode(SearchModel.self, from: data)
+            
+            successMessage = searchResponse.message.isEmpty ? "Searches loaded successfully" : searchResponse.message
+            
+            await MainActor.run {
+                searches =  searchResponse.data
+            }
+        } catch {
+            self.error = "An unexpected error occurred: \(error.localizedDescription)"
         }
     }
 }

@@ -21,6 +21,23 @@ enum Route: Hashable {
     case homeLimitedDiscountSeeAll(limitedDiscountList: [ProductCheapest])
     case homeCheapestSeeAll(cheapestList: [ProductCheapest])
     case homeTodaySpecialSeeAll(todaySpecialList: [ProductCheapest])
+    
+    //! Search
+    case searchSalePage(searchData: SearchData)
+    
+    //! Auth
+    case authScreen
+    case passwordResetRequest
+    case verifyResetRequest(email: String)
+    case resetPassword(email:String, otp: String)
+    case verificationOtp(email: String)
+    case changePassword
+    case deleteOtpScreen
+    
+    //! Account
+    case notificationscreen
+    case profilescreen
+    case helpcenter
 }
 
 @Observable

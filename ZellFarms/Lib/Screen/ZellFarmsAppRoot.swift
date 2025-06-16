@@ -25,9 +25,7 @@ struct ZellFarmsAppRoot: View {
                     CategoryScreen()
                     
                 case .Search:
-                    Text("Notifications View")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.white)
+                    SearchScreen()
                     
                 case .Order:
                     Text("Cart View")
@@ -35,9 +33,7 @@ struct ZellFarmsAppRoot: View {
                         .background(Color.white)
                     
                 case .Account:
-                    Text("Profile View")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.white)
+                    AccountScreen()
                 }
                 
                 HStack(spacing: 0) {
@@ -83,6 +79,39 @@ struct ZellFarmsAppRoot: View {
                         .environment(router)
                 case .homeTodaySpecialSeeAll(let todaySpecialList):
                     HomeTodaySpecialSeeAll(todaySpecialList: todaySpecialList)
+                        .environment(router)
+                case .searchSalePage(let searchData):
+                    SearchSalePage(searchdata: searchData)
+                        .environment(router)
+                case .authScreen:
+                    AuthScreen()
+                        .environment(router)
+                case .passwordResetRequest:
+                    PasswordResetRequest()
+                        .environment(router)
+                case .verifyResetRequest(let email):
+                    VerifyResetRequest(email: email)
+                        .environment(router)
+                case .resetPassword(let email, let otp):
+                    ResetPassword(email: email, otp: otp)
+                        .environment(router)
+                case .verificationOtp(let email):
+                    VerificationScreen(email: email)
+                        .environment(router)
+                case .changePassword:
+                    ChangePassword()
+                        .environment(router)
+                case .notificationscreen:
+                    NotificationScreen()
+                        .environment(router)
+                case .deleteOtpScreen:
+                    DeleteOTPScreen()
+                        .environment(router)
+                case .profilescreen:
+                    MyProfileScreen()
+                        .environment(router)
+                case .helpcenter:
+                    HelpCenter()
                         .environment(router)
                 }
             }

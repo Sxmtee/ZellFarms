@@ -25,7 +25,7 @@ struct HomeTodayChoiceSeeAll: View {
                         HomeProductCard(
                             picture: choice.images.first?.url ?? "",
                             productName: choice.name,
-                            unitPrice: "Unit Price/ \(choice.productUnits[0].unit.symbol.rawValue)",
+                            unitPrice: "Unit Price/ \(choice.productUnits[0].unit.symbol)",
                             onTap: {
                                 router.push(.productSalePage(cheapest: choice))
                             }
@@ -36,6 +36,5 @@ struct HomeTodayChoiceSeeAll: View {
             }
         }
         .navigationTitle("All Today's Choices")
-        .environment(router)
     }
 }

@@ -39,7 +39,7 @@ struct HomeLimitedDiscount: View {
                             HomeProductCard(
                                 picture: category.images.first?.url ?? "",
                                 productName: category.name,
-                                unitPrice: "Unit Price/ \(category.productUnits[0].unit.symbol.rawValue)",
+                                unitPrice: "Unit Price/ \(category.productUnits[0].unit.symbol)",
                                 onTap: {
                                     router.push(.productSalePage(cheapest: category))
                                 }
