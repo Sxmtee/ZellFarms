@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 let baseUrl = "https://admin.zelfarms.com/api/v1"
 
@@ -32,4 +33,22 @@ func formatPrice(_ price: String) -> String {
 
 func getUnitDisplayText(_ unit: ProductUnit) -> String {
     return "\(unit.unitNumber) \(unit.unit.name)"
+}
+
+extension UIApplication {
+    var currentViewController: UIViewController? {
+        guard let windowScene = UIApplication.shared.connectedScenes
+                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+              let rootViewController = window.rootViewController else {
+            return nil
+        }
+        
+        var currentController = rootViewController
+        while let presentedController = currentController.presentedViewController {
+            currentController = presentedController
+        }
+        
+        return currentController
+    }
 }

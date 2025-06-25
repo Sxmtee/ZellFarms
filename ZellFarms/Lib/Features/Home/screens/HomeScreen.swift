@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeScreen: View {
     @State private var name = ZelPreferences.username
+    @Environment(Router.self) private var router
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -21,16 +22,20 @@ struct HomeScreen: View {
                     
                     Spacer()
                     
-                    Image(systemName: "cart.fill")
-                        .foregroundStyle(.accent)
-                        .font(.title2)
+                    Button {
+                        router.push(.cartscreen)
+                    } label: {
+                        Image(systemName: "cart.fill")
+                            .foregroundStyle(.accent)
+                            .font(.title2)
+                    }
                 }
                 
                 Text("Welcome back")
                     .font(.system(size: 20))
                     .foregroundStyle(.accent)
                 
-                if name != "" {
+                if !name.isEmpty {
                     Text(name)
                         .font(.system(size: 20, weight: .bold))
                         .foregroundStyle(.accent)

@@ -12,6 +12,7 @@ struct ProductSalePage: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @State private var cartRepo = CartRepo()
     @State private var selectedProductUnit: ProductProductUnit
     @State private var totalQuantity: Int = 1
     @State private var currentImageIndex: Int = 0
@@ -62,21 +63,9 @@ struct ProductSalePage: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    HStack {
-                        Text(cheapest.name)
-                            .font(.system(size: 20, weight: .bold))
-                        
-                        Spacer()
-                        
-                        Button {
-                            // TODO: Implement cart logic
-                        } label: {
-                            Image(systemName: "cart.fill")
-                                .foregroundStyle(.accent)
-                                .font(.title2)
-                        }
-                    }
-                    .padding(.bottom, 5)
+                    Text(cheapest.name)
+                        .font(.system(size: 20, weight: .bold))
+                        .padding(.bottom, 5)
                     
                     Text(getUnitPriceLabel())
                         .foregroundStyle(Color(uiColor: .systemGray))
@@ -115,7 +104,8 @@ struct ProductSalePage: View {
                 ProductBottomBar(
                     selectedProductUnit: $selectedProductUnit,
                     totalQuantity: $totalQuantity,
-                    cheapest: cheapest
+                    cheapest: cheapest,
+                    cartRepo: cartRepo
                 )
             }
         }
@@ -134,6 +124,15 @@ struct ProductSalePage: View {
                     .foregroundColor(.white)
                 }
             }
+        }
+        .snackbar(
+            isShowing: $cartRepo.showSuccessSnackbar,
+            message: cartRepo.successMessage ?? "",
+            isSuccess: true
+        )
+        .onChange(of: cartRepo.successMessage) { _, _ in
+            totalQuantity = 1
+            selectedProductUnit = cheapest.productUnits.first!
         }
     }
 }

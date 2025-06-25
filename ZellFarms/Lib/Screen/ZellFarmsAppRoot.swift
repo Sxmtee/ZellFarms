@@ -28,9 +28,7 @@ struct ZellFarmsAppRoot: View {
                     SearchScreen()
                     
                 case .Order:
-                    Text("Cart View")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.white)
+                    OrderScreen()
                     
                 case .Account:
                     AccountScreen()
@@ -112,6 +110,9 @@ struct ZellFarmsAppRoot: View {
                         .environment(router)
                 case .helpcenter:
                     HelpCenter()
+                        .environment(router)
+                case .cartscreen:
+                    CartScreen()
                         .environment(router)
                 }
             }

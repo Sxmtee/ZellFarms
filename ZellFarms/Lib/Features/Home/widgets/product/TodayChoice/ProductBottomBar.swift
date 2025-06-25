@@ -11,6 +11,7 @@ struct ProductBottomBar: View {
     @Binding var selectedProductUnit: ProductProductUnit
     @Binding var totalQuantity: Int
     let cheapest: ProductCheapest
+    let cartRepo: CartRepo
     
     private func decrement() {
         if totalQuantity > 1 {
@@ -47,7 +48,21 @@ struct ProductBottomBar: View {
             .clipShape(RoundedRectangle(cornerRadius: 15))
             
             Button {
-                //TODO: Add to cart
+                Task {
+                    let cartData = [
+                        CartData(
+                            productId: cheapest.id,
+                            productUnits: [
+                                CartProductUnits(
+                                    productUnitId: selectedProductUnit.id,
+                                    quantity: totalQuantity
+                                )
+                            ]
+                        )
+                    ]
+                    
+                    await cartRepo.createCart(cartData: cartData)
+                }
             } label: {
                 HStack {
                     Text("\(formatPrice(String(calculateTotalPrice()))) | Add to Cart")

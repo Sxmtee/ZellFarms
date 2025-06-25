@@ -38,6 +38,9 @@ enum Route: Hashable {
     case notificationscreen
     case profilescreen
     case helpcenter
+    
+    //! Cart
+    case cartscreen
 }
 
 @Observable
