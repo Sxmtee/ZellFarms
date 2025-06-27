@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CartScreen: View {
+    @Environment(Router.self) private var router
     @State private var cartRepo = CartRepo()
     @State private var summaryItems: [CartSummaryModel] = []
     let deliveryFee: Int = 4500
@@ -95,7 +96,12 @@ struct CartScreen: View {
                         summaryItems: summaryItems,
                         deliveryFee: deliveryFee
                     ) {
-                        //checkout
+                        router.replace(
+                            .checkoutscreen(
+                                cartSummary: summaryItems,
+                                totalFees: calculateGrandTotal()
+                            )
+                        )
                     }
                 }
             }
@@ -114,5 +120,6 @@ struct CartScreen: View {
             message: cartRepo.successMessage ?? "",
             isSuccess: true
         )
+        .environment(router)
     }
 }

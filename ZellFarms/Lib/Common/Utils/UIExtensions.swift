@@ -52,3 +52,14 @@ extension UIApplication {
         return currentController
     }
 }
+
+
+extension Encodable {
+    func toDictionary() throws -> [String: Any] {
+        let data = try JSONEncoder().encode(self)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert to dictionary"])
+        }
+        return dictionary
+    }
+}

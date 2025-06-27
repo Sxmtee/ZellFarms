@@ -114,6 +114,12 @@ struct ZellFarmsAppRoot: View {
                 case .cartscreen:
                     CartScreen()
                         .environment(router)
+                case .checkoutscreen(let cartSummary, let totalFees):
+                    CheckoutScreen(cartSummary: cartSummary, totalFees: totalFees)
+                        .environment(router)
+                case .addLocation:
+                    AddLocation()
+                        .environment(router)
                 }
             }
         }

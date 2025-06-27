@@ -41,6 +41,8 @@ enum Route: Hashable {
     
     //! Cart
     case cartscreen
+    case checkoutscreen(cartSummary: [CartSummaryModel], totalFees: Int)
+    case addLocation
 }
 
 @Observable
