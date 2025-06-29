@@ -97,6 +97,7 @@ class AuthRepo {
     }
     
     var router: Router
+    private let cartRepo = CartRepo()
     
     init(router: Router) {
         self.router = router
@@ -145,6 +146,11 @@ class AuthRepo {
                 ZelPreferences.email = email
                 ZelPreferences.accessToken = accessToken
                 ZelPreferences.username = nickname
+                
+                await cartRepo.syncLocalCartToServer()
+                if cartRepo.error == nil {
+                    await cartRepo.getCart()
+                }
             }
             
             if let message = json?["message"] as? String {
@@ -352,6 +358,11 @@ class AuthRepo {
                 ZelPreferences.email = email
                 ZelPreferences.accessToken = accessToken
                 ZelPreferences.username = nickname
+                
+                await cartRepo.syncLocalCartToServer()
+                if cartRepo.error == nil {
+                    await cartRepo.getCart()
+                }
             }
             
             if let message = json?["message"] as? String {

@@ -61,7 +61,22 @@ struct ProductBottomBar: View {
                         )
                     ]
                     
-                    await cartRepo.createCart(cartData: cartData)
+                    if ZelPreferences.accessToken.isEmpty {
+                        let localItem = LocalCartItem(
+                            productId: cheapest.id,
+                            productUnitId: selectedProductUnit.id,
+                            quantity: totalQuantity,
+                            name: cheapest.name,
+                            price: selectedProductUnit.pricePerUnit,
+                            unitName: cheapest.productUnits.first!.unit.name
+                        )
+                        cartRepo.addToLocalCart(item: localItem)
+                        await MainActor.run {
+                            cartRepo.successMessage = "Added to local cart"
+                        }
+                    } else {
+                        await cartRepo.createCart(cartData: cartData)
+                    }
                 }
             } label: {
                 HStack {

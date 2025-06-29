@@ -55,6 +55,21 @@ struct AddLocation: View {
         }
     }
     
+    private func prefillAddress() async {
+        let addresses = await cartRepo.getAddress()
+        if let firstAddress = addresses {
+            await MainActor.run {
+                streetNo = firstAddress.streetNo
+                zipCode = firstAddress.zipCode
+                nearestLandmark = firstAddress.nearestLandmark
+                address = firstAddress.address
+                city = firstAddress.city
+                selectedCountry = firstAddress.countryID
+                selectedState = firstAddress.stateID
+            }
+        }
+    }
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 15) {
@@ -174,6 +189,7 @@ struct AddLocation: View {
         .task {
             await cartRepo.getCountries()
             await cartRepo.getState()
+            await prefillAddress()
         }
         .alert(isPresented: $cartRepo.showErrorSnackbar) {
             Alert(

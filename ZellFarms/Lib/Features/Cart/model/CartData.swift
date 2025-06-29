@@ -25,3 +25,13 @@ struct CartProductUnits: Codable {
         case quantity
     }
 }
+
+
+struct LocalCartItem: Codable {
+    let productId: String
+    let productUnitId: String
+    var quantity: Int
+    let name: String
+    let price: Int
+    let unitName: String
+}

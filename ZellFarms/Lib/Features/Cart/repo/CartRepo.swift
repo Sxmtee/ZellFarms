@@ -11,6 +11,7 @@ import SwiftyNetworking
 @Observable
 class CartRepo {
     var cartItems: [CartItem] = []
+    var localCartItems: [LocalCartItem] = []
     var deliveryChannels: [DeliveryChannel] = []
     var countries: [Country] = []
     var states: [States] = []
@@ -32,6 +33,60 @@ class CartRepo {
                 showSuccessSnackbar = true
                 showErrorSnackbar = false
             }
+        }
+    }
+    
+    private let localCartKey = "localCartItems"
+    
+    init() {
+        if let data = UserDefaults.standard.data(forKey: localCartKey),
+           let savedItems = try? JSONDecoder().decode([LocalCartItem].self, from: data) {
+            localCartItems = savedItems
+        }
+    }
+    
+    // Save local cart to UserDefaults
+    private func saveLocalCart() {
+        if let data = try? JSONEncoder().encode(localCartItems) {
+            UserDefaults.standard.set(data, forKey: localCartKey)
+        }
+    }
+    
+    // Add item to local cart
+    func addToLocalCart(item: LocalCartItem) {
+        if let index = localCartItems.firstIndex(where: { $0.productUnitId == item.productUnitId }) {
+            localCartItems[index].quantity += item.quantity
+        } else {
+            localCartItems.append(item)
+        }
+        saveLocalCart()
+    }
+    
+    // Clear local cart
+    func clearLocalCart() {
+        localCartItems = []
+        UserDefaults.standard.removeObject(forKey: localCartKey)
+    }
+    
+    // Sync local cart to server after login
+    func syncLocalCartToServer() async {
+        guard !localCartItems.isEmpty, !ZelPreferences.accessToken.isEmpty else { return }
+        
+        let cartData = localCartItems.map { item in
+            CartData(
+                productId: item.productId,
+                productUnits: [
+                    CartProductUnits(
+                        productUnitId: item.productUnitId,
+                        quantity: item.quantity
+                    )
+                ]
+            )
+        }
+        
+        await createCart(cartData: cartData)
+        if error == nil {
+            clearLocalCart()
         }
     }
     
@@ -322,7 +377,7 @@ class CartRepo {
             let bodyData = try JSONSerialization.data(withJSONObject: body)
             
             let request = try SwiftyNetworkingRequest(
-                url: URL(string: "\(baseUrl)/address"),
+                url: URL(string: "\(baseUrl)/create-order"),
                 method: .post,
                 headers: [
                     "Content-Type": "application/json",

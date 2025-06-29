@@ -23,21 +23,99 @@ struct CartScreen: View {
     }
     
     private func mapToSummaryItems(_ cartItems: [CartItem]) -> [CartSummaryModel] {
-        cartItems.map { item in
-            CartSummaryModel(
-                id: item.productID,
-                name: item.productUnit.product.name,
-                price: item.productUnit.pricePerUnit,
-                quantity: item.quantity,
-                productId: item.productUnitID,
-                unitName: item.productUnit.unit.name
-            )
+        if ZelPreferences.accessToken.isEmpty {
+            return cartRepo.localCartItems.map { item in
+                CartSummaryModel(
+                    id: item.productId,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    productId: item.productUnitId,
+                    unitName: item.unitName
+                )
+            }
+        } else {
+            return cartItems.map { item in
+                CartSummaryModel(
+                    id: item.productID,
+                    name: item.productUnit.product.name,
+                    price: item.productUnit.pricePerUnit,
+                    quantity: item.quantity,
+                    productId: item.productUnitID,
+                    unitName: item.productUnit.unit.name
+                )
+            }
         }
     }
     
     private func refreshCart() async {
         await cartRepo.getCart()
         summaryItems = mapToSummaryItems(cartRepo.cartItems)
+    }
+    
+    private var emptyCartView: some View {
+        VStack {
+            Image(systemName: "cart")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 80, height: 80)
+                .foregroundColor(.gray)
+                .padding(.bottom, 20)
+            
+            Text("Your cart is empty")
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(.gray)
+                .padding(.bottom, 10)
+            
+            Text("Add some items to get started!")
+                .font(.system(size: 16))
+                .foregroundColor(.gray)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func cartItemsView() -> some View {
+        ForEach(Array(summaryItems.enumerated()), id: \.element.id) { index, item in
+            CartProductCard(
+                item: item,
+                onDelete: {
+                    if ZelPreferences.accessToken.isEmpty {
+                        cartRepo.localCartItems.removeAll { $0.productId == item.id }
+                        summaryItems = mapToSummaryItems(cartRepo.cartItems)
+                    } else {
+                        Task {
+                            await cartRepo.deleteCart(id: item.id)
+                            await refreshCart()
+                        }
+                    }
+                },
+                onQuantityChange: { increase in
+                    if increase {
+                        summaryItems[index].quantity += 1
+                    } else if item.quantity > 1 {
+                        summaryItems[index].quantity -= 1
+                    }
+                }
+            )
+        }
+    }
+    
+    private var footerView: some View {
+        CartSummaryFooter(
+            summaryItems: summaryItems,
+            deliveryFee: deliveryFee
+        ) {
+            if ZelPreferences.accessToken.isEmpty {
+                router.push(.authScreen)
+            } else {
+                router.replace(
+                    .checkoutscreen(
+                        cartSummary: summaryItems,
+                        totalFees: calculateGrandTotal()
+                    )
+                )
+            }
+        }
     }
     
     var body: some View {
@@ -48,61 +126,16 @@ struct CartScreen: View {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 15) {
                         if summaryItems.isEmpty {
-                            VStack {
-                                Image(systemName: "cart")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 80, height: 80)
-                                    .foregroundColor(.gray)
-                                    .padding(.bottom, 20)
-                                
-                                Text("Your cart is empty")
-                                    .font(.system(size: 20, weight: .medium))
-                                    .foregroundColor(.gray)
-                                    .padding(.bottom, 10)
-                                
-                                Text("Add some items to get started!")
-                                    .font(.system(size: 16))
-                                    .foregroundColor(.gray)
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            emptyCartView
                         } else {
-                            ForEach(Array(summaryItems.enumerated()), id: \.element.id) { index, item in
-                                CartProductCard(
-                                    item: item,
-                                    onDelete: {
-                                        let itemId = item.id
-                                        summaryItems.remove(at: index)
-                                        
-                                        await cartRepo.deleteCart(id: itemId)
-                                        await refreshCart()
-                                    },
-                                    onQuantityChange: { increase in
-                                        if increase {
-                                            summaryItems[index].quantity += 1
-                                        } else if item.quantity > 1 {
-                                            summaryItems[index].quantity -= 1
-                                        }
-                                    }
-                                )
-                            }
+                            cartItemsView()
                         }
                     }
                     .padding(10)
                 }
                 .scrollBounceBehavior(.basedOnSize)
                 .safeAreaInset(edge: .bottom) {
-                    CartSummaryFooter(
-                        summaryItems: summaryItems,
-                        deliveryFee: deliveryFee
-                    ) {
-                        router.replace(
-                            .checkoutscreen(
-                                cartSummary: summaryItems,
-                                totalFees: calculateGrandTotal()
-                            )
-                        )
-                    }
+                    footerView
                 }
             }
         }
